@@ -13,7 +13,7 @@ export class FoodController {
         @inject(TYPES.CategoryService) private categoryService: CategoryService,
         @inject(TYPES.SupplierService) private supplierService: SupplierService) { }
 
-    @httpPost('/add',validateFoodMiddleware)
+    @httpPost('/add', validateFoodMiddleware)
     async addFood(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { name, description, category, supplier, price, quantity } = req.body;
@@ -80,11 +80,37 @@ export class FoodController {
     async showFoods(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const foodData = await this.foodService.showAllFood();
-            if (foodData.length===0) {
+            if (foodData.length === 0) {
                 res.status(404).json({ message: "Food's Data Not Found !" })
                 return
             }
             res.status(200).json({ foodData, message: "Food's Data" })
+            
+
+        } catch (error) {
+            // console.log("error",error);
+            
+            next(error)
+        }
+    }
+
+    @httpGet('/byQuery')
+    async allFoods(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+
+            const { page, limit, search, filter } = req.query;
+
+            const pageNumber = parseInt(page as string) || 1;
+            const limitNumber = parseInt(limit as string) || 10;
+            const searchString = search as string || '';
+            const filterObject = filter ? JSON.parse(filter as string) : {};
+
+            // console.log(pageNumber, limitNumber, searchString, filterObject);
+            
+            const food = await this.foodService.getAllFoods(pageNumber, limitNumber, searchString, filterObject);
+
+
+            res.status(200).json({ food, message: "Food's Data" })
 
 
         } catch (error) {

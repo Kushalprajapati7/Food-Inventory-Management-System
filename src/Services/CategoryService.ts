@@ -27,4 +27,31 @@ export class CategoryService {
         const category = await CategoryModel.findById(id);
         return category;
     }
+
+    async getCategory(page:number, limit:number,search?:string):Promise<ICategory[]>{
+        const pipeline: any[]= [
+            {
+                $skip: (page-1)*limit
+            },
+            {
+                $limit: limit
+            }
+        ];
+
+        if(search){
+            pipeline.push({
+                $match:{
+                    $or:[
+                        {name: {$regex:search, $options:"i"} },
+                        {description:{$regex:search, $options:"i"}  }
+                    ]
+                }
+            });
+        }
+
+        const result = await CategoryModel.aggregate(pipeline);
+        return result
+        
+        
+    }
 }

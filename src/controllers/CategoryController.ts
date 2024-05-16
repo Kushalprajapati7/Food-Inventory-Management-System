@@ -68,4 +68,19 @@ export class CategoryController {
             next(error)
         }
     }
+
+    @httpGet('/byQuery')
+    async getCategory(req:Request, res:Response, next:NextFunction):Promise<void>{
+        try {
+                const {page, limit,search} = req.query;
+                
+                const pageNumber = parseInt(page as string) || 1;
+                const limitNumber = parseInt(limit as string) || 10;
+                const searchString = search as string || "";
+                const category = await this.categoryService.getCategory(pageNumber,limitNumber,searchString);
+                res.status(200).json({ message: "Categories", category });
+        } catch (error) {
+            next(error)
+        }
+    }
 }

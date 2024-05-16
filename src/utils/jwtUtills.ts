@@ -6,7 +6,7 @@ export class JwtUtiils {
     private static secrateKey = process.env.Secrate_Key;
 
     static generateToken(userId:string| object):string{
-        const token = jwt.sign({userId},this.secrateKey);
+        const token = jwt.sign({userId},this.secrateKey, {expiresIn:'1h'});
         return token;
     }
 

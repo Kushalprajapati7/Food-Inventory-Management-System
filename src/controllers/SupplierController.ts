@@ -73,6 +73,30 @@ export class SupplierController {
             next(error)
         }
     }
+
+    @httpGet('/ByQuery')
+    async getSuplliers(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            
+            const { page, limit, search, filter } = req.query;
+
+            // Parse query parameters or use default values
+            const pageNumber = parseInt(page as string) || 1;
+            const limitNumber = parseInt(limit as string) || 10;
+            const searchString = search as string ||  '' ;
+            // console.log(searchString);
+            
+            const filterObject = filter ? JSON.parse(filter as string) : {};
+
+            // Call the service method to fetch suppliers based on query parameters
+            const suppliers = await this.supplierService.getAllSupplier(pageNumber, limitNumber, searchString, filterObject);
+
+            res.status(200).json({ message: "Suppliers", suppliers });
+
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 
