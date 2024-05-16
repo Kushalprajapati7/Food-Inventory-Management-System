@@ -3,15 +3,15 @@ import e, { Request, Response,NextFunction } from "express"
 import { UserService } from "../Services/UserServices";
 import { controller, httpGet, httpPost, next } from "inversify-express-utils";
 import { TYPES } from "../types/types";
-import { validateUserMiddleware } from "../Middleware/validation";
 import authMiddlware from "../Middleware/authMiddlware";
 import CustomRequest from "../utils/customRequest";
+import { validateUserMiddleware } from "../Middleware/validation";
 
 @controller('/user')
 export class UserController {
     constructor(@inject(TYPES.UserService) private userService: UserService) { }
 
-    @httpPost('/signup')
+    @httpPost('/signup',validateUserMiddleware)
     async createUser(req: Request, res: Response,next:NextFunction): Promise<void> {
         try {
             const { username, password, email, role } = req.body;
