@@ -18,6 +18,7 @@ let app = server.build();
 app.use(ErrorHandler)
 
 const MONGO_URI = process.env.mongoURL;
+
 const PORT = process.env.PORT || 3000;
 
 const db = new Database(MONGO_URI);
