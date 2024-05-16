@@ -3,12 +3,14 @@ import { Request, Response, NextFunction } from "express";
 import { controller, httpDelete, httpGet, httpPost, httpPut } from "inversify-express-utils";
 import { TYPES } from "../types/types";
 import { CategoryService } from "../Services/CategoryService";
+import { validateCategory } from "../Middleware/validation";
+
 
 @controller('/category')
 export class CategoryController {
     constructor(@inject(TYPES.CategoryService) private categoryService: CategoryService) { }
 
-    @httpPost('/add')
+    @httpPost('/add',validateCategory)
     async createCategory(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { name, description } = req.body;

@@ -3,13 +3,15 @@ import { controller, httpDelete, httpGet, httpPost, httpPut } from "inversify-ex
 import { inject } from "inversify";
 import { TYPES } from "../types/types";
 import { SupplierService } from "../Services/SupplierService";
+import { SupplierValidation } from "../validation/Validation";
+import { validateSupplier } from "../Middleware/validation";
 
 
 @controller('/supplier')
 export class SupplierController {
     constructor(@inject(TYPES.SupplierService) private supplierService: SupplierService) { }
 
-    @httpPost('/add')
+    @httpPost('/add', validateSupplier)
     async createSupplier(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { name, contactNo, address } = req.body;
