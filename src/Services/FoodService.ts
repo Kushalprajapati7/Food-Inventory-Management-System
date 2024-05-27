@@ -6,8 +6,8 @@ import { PipelineStage } from "mongoose";
 @injectable()
 export class FoodService {
 
-    async addFood(name: string, description: string, category: string, supplier: string, price: string, quantity: string): Promise<IFood> {
-        const newFood = await FoodModel.create({ name, description, category, supplier, price, quantity })
+    async addFood(name: string, description: string, category: string, supplier: string, price: string, quantity: string, image:string): Promise<IFood> {
+        const newFood = await FoodModel.create({ name, description, category, supplier, price, quantity, image })
         return newFood;
     }
 

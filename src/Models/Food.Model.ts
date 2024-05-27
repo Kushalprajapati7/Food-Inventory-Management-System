@@ -4,10 +4,11 @@ import { IFood } from "../Interfaces/foodInterface";
 const foodSchema = new Schema({
     name: {type:String, required:true},
     description: {type:String, required:true},
-    category: {type:Schema.Types.String, required:true},
-    supplier: {type:Schema.Types.String, required:true},
+    category: {type:Schema.Types.ObjectId, required:true},
+    supplier: {type:Schema.Types.ObjectId, required:true},
     price: {type:Number, required:true},
     quantity: {type:Number, required:true},
+    image:{type:String, required:true}
 },{
     timestamps:true,
 });

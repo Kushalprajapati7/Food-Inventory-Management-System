@@ -6,6 +6,7 @@ import { Request, Response, NextFunction } from "express";
 import { CategoryService } from "../Services/CategoryService";
 import { SupplierService } from "../Services/SupplierService";
 import { validateFoodMiddleware } from "../Middleware/validation";
+import upload from '../Middleware/multer';
 
 @controller('/food')
 export class FoodController {
@@ -13,19 +14,19 @@ export class FoodController {
         @inject(TYPES.CategoryService) private categoryService: CategoryService,
         @inject(TYPES.SupplierService) private supplierService: SupplierService) { }
 
-    @httpPost('/add', validateFoodMiddleware)
+    @httpPost('/add',upload.single('image'), validateFoodMiddleware)
     async addFood(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { name, description, category, supplier, price, quantity } = req.body;
-
+            const { name, description, category, supplier, price, quantity} = req.body;
+            const image = req.file?.path;
             const categoryData = await this.categoryService.getCategoryById(category);
             const supplierData = await this.supplierService.findSupplierById(supplier);
 
             // console.log(categoryData.name, "category");
             // console.log(supplierData.name, "supplier");
 
-            // const newFood = await this.foodService.addFood(name, description, category, supplier, price, quantity)
-            const newFood = await this.foodService.addFood(name, description, categoryData.name, supplierData.name, price, quantity)
+            const newFood = await this.foodService.addFood(name, description, category, supplier, price, quantity, image)
+            // const newFood = await this.foodService.addFood(name, description, categoryData.name, supplierData.name, price, quantity,image)
             res.status(201).json({ newFood, message: "New Food Added" })
 
         } catch (error) {
