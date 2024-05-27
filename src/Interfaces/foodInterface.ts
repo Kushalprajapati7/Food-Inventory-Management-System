@@ -1,11 +1,12 @@
-import mongoose,{Document} from "mongoose";
+import mongoose,{Document, Types} from "mongoose";
 
 export interface IFood extends Document{
-    _id?:mongoose.Schema.Types.ObjectId;
+    _id?:Types.ObjectId;
     name:string;
     description:string;
-    category:string;
-    supplier:string;
+    category:Types.ObjectId;
+    supplier:Types.ObjectId;
     price:number;
     quantity:number;
+    image: string;
 }
